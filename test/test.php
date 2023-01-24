@@ -4,11 +4,15 @@ use SbWereWolf\BatchFileScripting\Configuration\EnvReader;
 use SbWereWolf\BatchFileScripting\Convertation\DurationPrinter;
 
 $pathParts = [__DIR__, '..', 'vendor', 'autoload.php',];
-$path = implode(DIRECTORY_SEPARATOR, $pathParts);
+$path = join(DIRECTORY_SEPARATOR, $pathParts);
 require_once($path);
 
 $printer =
     new DurationPrinter();
+echo $printer->printSeconds(0) . PHP_EOL;
+/* 00:00:00 */
+echo $printer->printNanoseconds(0) . PHP_EOL;
+/* 00:00:00 000 ms 000 mcs 000 ns ns */
 echo $printer->printSeconds(100000) . PHP_EOL;
 /* 27:46:40 */
 echo $printer->printNanoseconds(100000999888777) . PHP_EOL;

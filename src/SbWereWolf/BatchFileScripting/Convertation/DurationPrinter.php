@@ -79,11 +79,11 @@ class DurationPrinter implements JsonSerializable
     private function formatSeconds(array $parts): string
     {
         $secondParts = array_slice($parts, 0, 3);
-        array_walk($parts, function (&$val, $key) {
+        array_walk($secondParts, function (&$val, $key) {
             $val = str_pad((string)$val, 2, '0', STR_PAD_LEFT);
         });
 
-        $formatted = implode(':', $secondParts);
+        $formatted = join(':', $secondParts);
 
         return $formatted;
     }
@@ -120,7 +120,7 @@ class DurationPrinter implements JsonSerializable
             $val = "$val $key";
         });
 
-        $formatted = implode(' ', $nanosecondParts);
+        $formatted = join(' ', $nanosecondParts);
 
         return $formatted;
     }
