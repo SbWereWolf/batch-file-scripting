@@ -1,0 +1,63 @@
+{
+  "_readme": [
+    "This file locks the dependencies of your project to a known state",
+    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+    "This file is @generated automatically"
+  ],
+  "content-hash": "c7a9bbb721170af8e7e5cc56b8e455d3",
+  "packages": [
+    {
+      "name": "sbwerewolf/json-serialize-trait",
+      "version": "v1.0.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/SbWereWolf/json-serialize-trait.git",
+        "reference": "62c7395a60ad348d9bc91cd6b0cb20d823ad2a8c"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/SbWereWolf/json-serialize-trait/zipball/62c7395a60ad348d9bc91cd6b0cb20d823ad2a8c",
+        "reference": "62c7395a60ad348d9bc91cd6b0cb20d823ad2a8c",
+        "shasum": ""
+      },
+      "require": {
+        "ext-json": "*"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "": [
+            "src/"
+          ]
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Nikolay Volkhin",
+          "email": "ulfnew@gmail.com"
+        }
+      ],
+      "description": "Library with trait of ability to output all properties of class-exemplar at call json_encode()",
+      "support": {
+        "issues": "https://github.com/SbWereWolf/json-serialize-trait/issues",
+        "source": "https://github.com/SbWereWolf/json-serialize-trait/tree/v1.0.1"
+      },
+      "time": "2023-01-24T01:03:00+00:00"
+    }
+  ],
+  "packages-dev": [],
+  "aliases": [],
+  "minimum-stability": "stable",
+  "stability-flags": [],
+  "prefer-stable": false,
+  "prefer-lowest": false,
+  "platform": {
+    "ext-json": "*"
+  },
+  "platform-dev": [],
+  "plugin-api-version": "2.3.0"
+}

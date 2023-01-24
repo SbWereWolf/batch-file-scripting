@@ -1,0 +1,23 @@
+{
+  "name": "sbwerewolf/batch-file-scripting",
+  "description": "Kit of utility classes for batch file scripting",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nikolay Volkhin",
+      "email": "ulfnew@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "ext-json": "*",
+    "sbwerewolf/json-serialize-trait": "^1.0"
+  }
+}
