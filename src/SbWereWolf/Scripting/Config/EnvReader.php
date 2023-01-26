@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SbWereWolf\BatchFileScripting\Configuration;
+namespace SbWereWolf\Scripting\Config;
 
 use InvalidArgumentException;
 use JsonSerializable;

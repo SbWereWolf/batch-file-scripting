@@ -1,14 +1,18 @@
 <?php
 
-use SbWereWolf\BatchFileScripting\Configuration\EnvReader;
-use SbWereWolf\BatchFileScripting\Convertation\DurationPrinter;
+use SbWereWolf\Scripting\Config\EnvReader;
+use SbWereWolf\Scripting\Convert\DurationPrinter;
+use SbWereWolf\Scripting\FileSystem\Path;
 
 $pathParts = [__DIR__, '..', 'vendor', 'autoload.php',];
 $path = join(DIRECTORY_SEPARATOR, $pathParts);
 require_once($path);
 
-$printer =
-    new DurationPrinter();
+$path = (new Path())->make([__DIR__, '..', 'vendor', 'autoload.php']);
+echo $path . PHP_EOL;
+/* \D:\WORK\batch-file-scripting\test\..\vendor\autoload.php */
+
+$printer = new DurationPrinter();
 echo $printer->printSeconds(0) . PHP_EOL;
 /* 00:00:00 */
 echo $printer->printNanoseconds(0) . PHP_EOL;
@@ -36,7 +40,7 @@ echo json_encode($env, JSON_PRETTY_PRINT) . PHP_EOL;
 */
 echo var_dump($env) . PHP_EOL;
 /*
-class SbWereWolf\BatchFileScripting\Configuration\EnvReader#3 (1) {
+class SbWereWolf\Scripting\Config\EnvReader#3 (1) {
   private array $variables =>
   array(4) {
     'USER' =>

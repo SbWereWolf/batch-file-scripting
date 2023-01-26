@@ -17,7 +17,7 @@ Code examples in [test.php](test/test.php)
 
 ```php
 $env =
-    new \SbWereWolf\BatchFileScripting\Configuration\EnvReader($path);
+    new \SbWereWolf\Scripting\Config\EnvReader($path);
 
 var_dump($env->getVariables());
 /*
@@ -45,11 +45,20 @@ echo getenv('FLAG') . PHP_EOL;
 
 ```php
 $printer =
-    new \SbWereWolf\BatchFileScripting\Convertation\DurationPrinter();
+    new \SbWereWolf\Scripting\Convert\DurationPrinter();
 echo $printer->printSeconds(100000) . PHP_EOL;
 /* 27:46:40 */
 echo $printer->printNanoseconds(100000999888777) . PHP_EOL;
 /* 27:46:40 999 ms 888 mcs 777 ns */
+```
+
+## How to use Path
+
+```php
+$path = (new \SbWereWolf\Scripting\FileSystem\Path())
+    ->make([__DIR__, '..', 'vendor', 'autoload.php']);
+echo $path . PHP_EOL;
+/* \D:\WORK\batch-file-scripting\test\..\vendor\autoload.php */
 ```
 
 ## Contacts

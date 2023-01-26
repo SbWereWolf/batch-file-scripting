@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SbWereWolf\BatchFileScripting\Convertation;
+namespace SbWereWolf\Scripting\Convert;
 
 use JsonSerializable;
 use SbWereWolf\JsonSerializable\JsonSerializeTrait;
