@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SbWereWolf\Scripting\FileSystem;
 
 class Path
 {
-    private string $root;
-    private string $pathSeparator;
+    private readonly string $root;
+    private readonly string $pathSeparator;
 
     public function __construct(
         string $root = '',
@@ -17,10 +19,13 @@ class Path
 
     public function make(array $parts)
     {
-        $path =
-            $this->root .
-            $this->pathSeparator .
-            join($this->pathSeparator, $parts);
+        $path = join($this->pathSeparator, $parts);
+        if ($this->root) {
+            $path =
+                $this->root .
+                $this->pathSeparator .
+                $path;
+        }
 
         return $path;
     }
