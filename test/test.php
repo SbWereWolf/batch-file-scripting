@@ -1,32 +1,41 @@
 <?php
 
-use SbWereWolf\Scripting\Config\EnvReader;
-use SbWereWolf\Scripting\Convert\DurationPrinter;
-use SbWereWolf\Scripting\FileSystem\Path;
-
 $pathParts = [__DIR__, '..', 'vendor', 'autoload.php',];
 $path = join(DIRECTORY_SEPARATOR, $pathParts);
 require_once($path);
 
-$path = (new Path())->make([__DIR__, '..', 'vendor', 'autoload.php']);
+$pathMaker = (new SbWereWolf\Scripting\FileSystem\Path());
+$path = $pathMaker->make(['.', 'config', 'test.env',]);
 echo $path . PHP_EOL;
-/* \D:\WORK\batch-file-scripting\test\..\vendor\autoload.php */
+/* .\config\test.env */
 
-$printer = new DurationPrinter();
-echo $printer->printSeconds(0) . PHP_EOL;
-/* 00:00:00 */
-echo $printer->printNanoseconds(0) . PHP_EOL;
-/* 00:00:00 000 ms 000 mcs 000 ns ns */
-echo $printer->printSeconds(100000) . PHP_EOL;
-/* 27:46:40 */
-echo $printer->printNanoseconds(100000999888777) . PHP_EOL;
-/* 27:46:40 999 ms 888 mcs 777 ns */
+$seconds =
+    new SbWereWolf\Scripting\Convert\SecondsConverter('%dd, %H:%I:%S');
+echo $seconds->print(0) . PHP_EOL;
+/* 0d, 00:00:00 */
+echo $seconds->print(100000.111) . PHP_EOL;
+/* 1d, 03:46:40 */
 
-$pathParts = [__DIR__, 'config', 'test.env',];
-$path = join(DIRECTORY_SEPARATOR, $pathParts);
+$nanoseconds =
+    new SbWereWolf\Scripting\Convert\NanosecondsConverter('%dd, %H:%I:%S.%F%N');
+echo $nanoseconds->print(0) . PHP_EOL;
+/* 0d, 00:00:00.000000000 */
+echo $nanoseconds->print(100000999888777.999) . PHP_EOL;
+/* 1d, 03:46:40.999888778 */
+
+$shortFormatNanoseconds =
+    new SbWereWolf\Scripting\Convert\NanosecondsConverter('%L ms %U mcs %N ns');
+echo $shortFormatNanoseconds->print(0) . PHP_EOL;
+/* 000 ms 000 mcs 000 ns */
+echo $shortFormatNanoseconds->print(99088077.999) . PHP_EOL;
+/* 099 ms 088 mcs 077 ns */
+
+$path =
+    (new SbWereWolf\Scripting\FileSystem\Path())
+        ->make(['.', 'config', 'test.env',]);
 
 $env =
-    new EnvReader($path);
+    new SbWereWolf\Scripting\Config\EnvReader($path);
 echo json_encode($env, JSON_PRETTY_PRINT) . PHP_EOL;
 /*
 {

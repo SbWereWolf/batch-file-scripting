@@ -4,8 +4,9 @@ Kit of utility classes for batch file scripting.
 
 - `EnvReader` - parse the `.env` files to array and define constants
   or environment variables
-- `DurationPrinter` - prints duration in seconds or nanoseconds with
+- `DurationConverter` - prints duration in seconds or nanoseconds with
   human-readable format
+- `Path` - glue up file system path
 
 Code examples in [test.php](test/test.php)
 
@@ -16,8 +17,9 @@ Code examples in [test.php](test/test.php)
 ## How to use EnvReader
 
 ```php
-$env =
-    new \SbWereWolf\Scripting\Config\EnvReader($path);
+$path = (new Path())->make(['.', 'config', 'test.env',]);
+/* .env file location is './config/test.env' */
+$env = new SbWereWolf\Scripting\Config\EnvReader($path);
 
 var_dump($env->getVariables());
 /*
@@ -41,24 +43,32 @@ echo getenv('FLAG') . PHP_EOL;
 /* FALSE */
 ```
 
-## How to use DurationPrinter
+## How to use DurationConverter
 
 ```php
-$printer =
-    new \SbWereWolf\Scripting\Convert\DurationPrinter();
-echo $printer->printSeconds(100000) . PHP_EOL;
-/* 27:46:40 */
-echo $printer->printNanoseconds(100000999888777) . PHP_EOL;
-/* 27:46:40 999 ms 888 mcs 777 ns */
+$printer = 
+new SbWereWolf\Scripting\Convert\SecondsConverter('%dd, %H:%I:%S');
+echo $printer->print(100000.111) . PHP_EOL;
+/* 1d, 03:46:40 */
+
+$printer = 
+new SbWereWolf\Scripting\Convert\NanosecondsConverter('%dd, %H:%I:%S.%F%N');
+echo $printer->print(100000999888777.999) . PHP_EOL;
+/* 1d, 03:46:40.999888778 */
+
+$printer = 
+new SbWereWolf\Scripting\Convert\NanosecondsConverter('%L ms %U mcs %N ns');
+echo $printer->print(99088077.999) . PHP_EOL;
+/* 099 ms 088 mcs 077 ns */
 ```
 
 ## How to use Path
 
 ```php
-$path = (new \SbWereWolf\Scripting\FileSystem\Path())
-    ->make([__DIR__, '..', 'vendor', 'autoload.php']);
+$pathMaker = (new SbWereWolf\Scripting\FileSystem\Path());
+$path = $pathMaker->make(['.', 'config', 'test.env',]);
 echo $path . PHP_EOL;
-/* \D:\WORK\batch-file-scripting\test\..\vendor\autoload.php */
+/* .\config\test.env */
 ```
 
 ## Contacts
