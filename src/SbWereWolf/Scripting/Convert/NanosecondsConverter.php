@@ -58,6 +58,7 @@ class NanosecondsConverter extends DurationConverter
         $increment->add(new DateInterval("P{$d}D"));
         $increment->setTime($h, $i, $s, $ms * 1000 + $mcs);
 
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
         $interval = $increment->diff($base);
 
         return $interval;

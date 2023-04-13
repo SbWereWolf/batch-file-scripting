@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SbWereWolf\Scripting\Convert;
 
 use DateInterval;
+use Exception;
 use SbWereWolf\JsonSerializable\JsonSerializeTrait;
 
 /**
@@ -34,6 +35,7 @@ class SecondsConverter extends DurationConverter
     /**
      * @param array $parts
      * @return DateInterval
+     * @throws Exception
      */
     protected function toInterval(array $parts): DateInterval
     {
@@ -43,6 +45,7 @@ class SecondsConverter extends DurationConverter
         $s = $parts[self::SECONDS];
 
         $template = "P{$d}DT{$h}H{$i}M{$s}S";
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
         $interval = new DateInterval($template);
 
         return $interval;

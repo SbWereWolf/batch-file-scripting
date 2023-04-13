@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SbWereWolf\Scripting\Convert;
 
 use DateInterval;
+use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use SbWereWolf\JsonSerializable\JsonSerializeTrait;
 
@@ -50,15 +51,18 @@ abstract class DurationConverter implements JsonSerializable
     ];
 
     private readonly string $format;
+    private NumbersSplitter $splitter;
 
-    public function __construct(string $format = '%y-%M-%D, %H:%I:%S.%F')
-    {
+    #[Pure]
+    public function __construct(
+        string $format = '%y-%M-%D, %H:%I:%S.%F'
+    ) {
         $this->splitter = new NumbersSplitter(static::RATIOS);
         $this->format = $format;
     }
 
     /**
-     * @param int $duration
+     * @param float $duration
      * @return string
      */
     public function print(float $duration): string
@@ -67,6 +71,7 @@ abstract class DurationConverter implements JsonSerializable
         $interval = $this->toInterval($parts);
 
         $output = $interval->format($this->format);
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
         $output = $this->substitute($output, $parts);
 
         return $output;
@@ -86,10 +91,10 @@ abstract class DurationConverter implements JsonSerializable
     private function substitute(string $output, array $parts): string
     {
         foreach (self::SUBSTITUTION as $substitution) {
-            $hasPlaceholder = strpos(
-                    $this->format,
-                    $substitution[self::PLACEHOLDER]
-                ) !== false;
+            $hasPlaceholder = str_contains(
+                $this->format,
+                $substitution[self::PLACEHOLDER]
+            );
             if ($hasPlaceholder) {
                 $value = $parts[$substitution[self::UNITS]] ?? 0;
                 $filler = str_pad(

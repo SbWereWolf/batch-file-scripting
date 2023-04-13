@@ -82,6 +82,7 @@ class EnvReader implements EnvReading, JsonSerializable
     public function defineVariables()
     {
         foreach ($this->getVariables() as $name => $value) {
+            /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
             putenv("{$name}={$value}");
         }
     }

@@ -23,6 +23,7 @@ class NumbersSplitter implements JsonSerializable
     }
 
     /**
+     * @param float $whole
      * @return array
      */
     public function sliceUp(float $whole): array

@@ -17,7 +17,7 @@ class Path
         $this->pathSeparator = $pathSeparator;
     }
 
-    public function make(array $parts)
+    public function make(array $parts): string
     {
         $path = join($this->pathSeparator, $parts);
         if ($this->root) {
