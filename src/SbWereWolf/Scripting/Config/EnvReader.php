@@ -65,10 +65,12 @@ class EnvReader implements EnvReading, JsonSerializable
     }
 
     /** @inheritdoc */
-    public function defineConstants()
+    public function defineConstants(): void
     {
         foreach ($this->getVariables() as $name => $value) {
-            define($name, $value);
+            if (!defined($name)) {
+                define($name, $value);
+            }
         }
     }
 
@@ -79,7 +81,7 @@ class EnvReader implements EnvReading, JsonSerializable
     }
 
     /** @inheritdoc */
-    public function defineVariables()
+    public function defineVariables(): void
     {
         foreach ($this->getVariables() as $name => $value) {
             /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
