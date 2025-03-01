@@ -39,7 +39,7 @@ class NumbersSplitter implements JsonSerializable
      * @param float $ratio
      * @return void
      */
-    private function extractPart(float &$ratio)
+    private function extractPart(float &$ratio): void
     {
         $integer = (int)floor($this->remainder / $ratio);
         $this->remainder = $this->remainder - $integer * $ratio;

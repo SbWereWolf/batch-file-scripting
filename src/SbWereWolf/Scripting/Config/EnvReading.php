@@ -10,12 +10,12 @@ interface EnvReading
     /** Define PHP constants from .env file
      * @return void
      */
-    public function defineConstants();
+    public function defineConstants(): void;
 
     /** Define environment variables from .env file
      * @return void
      */
-    public function defineVariables();
+    public function defineVariables(): void;
 
     /** Returns variables defined in .env file
      * @return array
