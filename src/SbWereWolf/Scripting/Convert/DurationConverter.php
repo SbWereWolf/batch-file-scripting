@@ -55,7 +55,7 @@ abstract class DurationConverter implements JsonSerializable
 
     #[Pure]
     public function __construct(
-        string $format = '%y-%M-%D, %H:%I:%S.%F'
+        string $format = '%y-%M-%D, %H:%I:%S.%F%N'
     ) {
         $this->splitter = new NumbersSplitter(static::RATIOS);
         $this->format = $format;

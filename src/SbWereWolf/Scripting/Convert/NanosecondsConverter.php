@@ -40,6 +40,12 @@ class NanosecondsConverter extends DurationConverter
         self::NANOSECONDS_UNITS => self::NS_TO_NS,
     ];
 
+    public function __construct(
+        string $format = '%dd, %H:%I:%S.%F%N'
+    ) {
+        parent::__construct($format);
+    }
+
     protected function toInterval(array $parts): DateInterval
     {
         $d = $parts[static::DAYS];

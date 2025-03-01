@@ -32,6 +32,12 @@ class SecondsConverter extends DurationConverter
         self::SECONDS => self::SEC_TO_SEC,
     ];
 
+    public function __construct(
+        string $format = '%dd, %H:%I:%S'
+    ) {
+        parent::__construct($format);
+    }
+
     /**
      * @param array $parts
      * @return DateInterval
