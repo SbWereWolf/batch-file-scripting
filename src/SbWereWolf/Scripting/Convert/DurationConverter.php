@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SbWereWolf\Scripting\Convert;
 
 use DateInterval;
-use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use SbWereWolf\JsonSerializable\JsonSerializeTrait;
 
@@ -16,49 +15,40 @@ abstract class DurationConverter implements JsonSerializable
 {
     use JsonSerializeTrait;
 
-    protected const RATIOS = [];
-    protected const MILLISECONDS_UNITS = 'ms';
-    private const MILLISECONDS_PLACEHOLDER = '%L';
-    protected const MICROSECONDS_UNITS = 'mcs';
-    private const MICROSECONDS_PLACEHOLDER = '%U';
-    protected const NANOSECONDS_UNITS = 'ns';
-    private const NANOSECONDS_PLACEHOLDER = '%N';
+    public const DAYS = 'D';
+    public const HOURS = 'H';
+    public const MINUTES = 'm';
+    public const SECONDS = 's';
+    public const MILLISECONDS_UNITS = 'ms';
+    protected const MILLISECONDS_PLACEHOLDER = '%L';
+    public const MICROSECONDS_UNITS = 'mcs';
+    protected const MICROSECONDS_PLACEHOLDER = '%U';
+    public const NANOSECONDS_UNITS = 'ns';
+    protected const NANOSECONDS_PLACEHOLDER = '%N';
 
-    private const UNITS = 'u';
-    private const PLACEHOLDER = 'p';
-    private const SYMBOL = 's';
-    private const LENGTH = 'l';
-
-    private const SUBSTITUTION = [
-        [
-            self::UNITS => self::MILLISECONDS_UNITS,
-            self::PLACEHOLDER => self::MILLISECONDS_PLACEHOLDER,
-            self::LENGTH => 3,
-            self::SYMBOL => '0'
-        ],
-        [
-            self::UNITS => self::MICROSECONDS_UNITS,
-            self::PLACEHOLDER => self::MICROSECONDS_PLACEHOLDER,
-            self::LENGTH => 3,
-            self::SYMBOL => '0'
-        ],
-        [
-            self::UNITS => self::NANOSECONDS_UNITS,
-            self::PLACEHOLDER => self::NANOSECONDS_PLACEHOLDER,
-            self::LENGTH => 3,
-            self::SYMBOL => '0'
-        ],
-    ];
-
-    private readonly string $format;
+    public const UNITS = 'u';
+    public const PLACEHOLDER = 'p';
+    public const PAD_LEFT_WITH_SYMBOL = 's';
+    public const LENGTH = 'l';
     private NumbersSplitter $splitter;
 
-    #[Pure]
     public function __construct(
-        string $format = '%y-%M-%D, %H:%I:%S.%F%N'
+        private readonly string $format = '%y-%M-%D, %H:%I:%S.%F%N',
+        private array $additionalFormats = [],
+        protected array $ratios = [],
     ) {
-        $this->splitter = new NumbersSplitter(static::RATIOS);
-        $this->format = $format;
+        $letUseDefaultSubstitution = count($additionalFormats) === 0;
+        if ($letUseDefaultSubstitution) {
+            $this->additionalFormats =
+                $this->getDefaultAdditionalFormats();
+        }
+
+        $letUseDefaultRatios = count($ratios) === 0;
+        if ($letUseDefaultRatios) {
+            $this->ratios = $this->getDefaultRatios();
+        }
+
+        $this->splitter = new NumbersSplitter($this->ratios);
     }
 
     /**
@@ -72,7 +62,7 @@ abstract class DurationConverter implements JsonSerializable
 
         $output = $interval->format($this->format);
         /** @noinspection PhpUnnecessaryLocalVariableInspection */
-        $output = $this->substitute($output, $parts);
+        $output = $this->additionalFormat($output, $parts);
 
         return $output;
     }
@@ -88,24 +78,26 @@ abstract class DurationConverter implements JsonSerializable
      * @param string $output
      * @return string
      */
-    private function substitute(string $output, array $parts): string
-    {
-        foreach (self::SUBSTITUTION as $substitution) {
+    private function additionalFormat(
+        string $output,
+        array $parts
+    ): string {
+        foreach ($this->additionalFormats as $substitution) {
             $hasPlaceholder = str_contains(
                 $this->format,
-                $substitution[self::PLACEHOLDER]
+                $substitution[static::PLACEHOLDER]
             );
             if ($hasPlaceholder) {
-                $value = $parts[$substitution[self::UNITS]] ?? 0;
+                $value = $parts[$substitution[static::UNITS]] ?? 0;
                 $filler = str_pad(
                     (string)$value,
-                    $substitution[self::LENGTH],
-                    $substitution[self::SYMBOL],
+                    $substitution[static::LENGTH],
+                    $substitution[static::PAD_LEFT_WITH_SYMBOL],
                     STR_PAD_LEFT
                 );
 
                 $output = str_replace(
-                    $substitution[self::PLACEHOLDER],
+                    $substitution[static::PLACEHOLDER],
                     $filler,
                     $output
                 );
@@ -114,4 +106,14 @@ abstract class DurationConverter implements JsonSerializable
 
         return $output;
     }
+
+    /**
+     * @return array
+     */
+    abstract protected function getDefaultAdditionalFormats(): array;
+
+    /**
+     * @return array
+     */
+    abstract protected function getDefaultRatios(): array;
 }

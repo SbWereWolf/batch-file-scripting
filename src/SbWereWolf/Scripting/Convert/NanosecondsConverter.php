@@ -25,25 +25,12 @@ class NanosecondsConverter extends DurationConverter
     private const NS_TO_MCS = 1000;
     private const NS_TO_NS = 1;
 
-    private const DAYS = 'D';
-    private const HOURS = 'H';
-    private const MINUTES = 'm';
-    private const SECONDS = 's';
-
-    protected const RATIOS = [
-        self::DAYS => self::NS_TO_DAYS,
-        self::HOURS => self::NS_TO_H,
-        self::MINUTES => self::NS_TO_MIN,
-        self::SECONDS => self::NS_TO_SEC,
-        self::MILLISECONDS_UNITS => self::NS_TO_MS,
-        self::MICROSECONDS_UNITS => self::NS_TO_MCS,
-        self::NANOSECONDS_UNITS => self::NS_TO_NS,
-    ];
-
     public function __construct(
-        string $format = '%dd, %H:%I:%S.%F%N'
+        string $format = '%dd, %H:%I:%S.%F%N',
+        array $substitution = [],
+        array $ratios = [],
     ) {
-        parent::__construct($format);
+        parent::__construct($format, $substitution, $ratios);
     }
 
     protected function toInterval(array $parts): DateInterval
@@ -68,5 +55,54 @@ class NanosecondsConverter extends DurationConverter
         $interval = $increment->diff($base);
 
         return $interval;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultAdditionalFormats(): array
+    {
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
+        $defaultSubstitution = [
+            [
+                static::UNITS => static::MILLISECONDS_UNITS,
+                static::PLACEHOLDER => static::MILLISECONDS_PLACEHOLDER,
+                static::LENGTH => 3,
+                static::PAD_LEFT_WITH_SYMBOL => '0'
+            ],
+            [
+                static::UNITS => static::MICROSECONDS_UNITS,
+                static::PLACEHOLDER => static::MICROSECONDS_PLACEHOLDER,
+                static::LENGTH => 3,
+                static::PAD_LEFT_WITH_SYMBOL => '0'
+            ],
+            [
+                static::UNITS => static::NANOSECONDS_UNITS,
+                static::PLACEHOLDER => static::NANOSECONDS_PLACEHOLDER,
+                static::LENGTH => 3,
+                static::PAD_LEFT_WITH_SYMBOL => '0'
+            ],
+        ];
+
+        return $defaultSubstitution;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultRatios(): array
+    {
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
+        $defaultRatios = [
+            static::DAYS => static::NS_TO_DAYS,
+            static::HOURS => static::NS_TO_H,
+            static::MINUTES => static::NS_TO_MIN,
+            static::SECONDS => static::NS_TO_SEC,
+            static::MILLISECONDS_UNITS => static::NS_TO_MS,
+            static::MICROSECONDS_UNITS => static::NS_TO_MCS,
+            static::NANOSECONDS_UNITS => static::NS_TO_NS,
+        ];
+
+        return $defaultRatios;
     }
 }
